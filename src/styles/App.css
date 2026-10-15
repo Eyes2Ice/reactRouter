@@ -1,0 +1,29 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 80vh;
+  padding-block: 10vh;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  font-size: 2rem;
+  color: #fff;
+}
+
+.active-link {
+  color: red;
+}
+
+.posts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 1.2rem;
+  text-decoration: underline;
+  color: blueviolet;
+}

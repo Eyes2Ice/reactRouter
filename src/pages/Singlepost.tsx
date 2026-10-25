@@ -1,26 +1,40 @@
-import { useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { Suspense } from "react";
+import { Await, useAsyncValue, useLoaderData } from "react-router-dom";
+
+const Post = () => {
+  const post = useAsyncValue();
+
+  return (
+    <>
+      <h1>{post.title}</h1>
+      <p>{post.body}</p>
+    </>
+  );
+};
 
 const Singlepost = () => {
-  const { id } = useParams();
-  const [post, setPost] = useState(null);
-
-  useEffect(() => {
-    fetch(`https://jsonplaceholder.typicode.com/posts/${id}`)
-      .then((res) => res.json())
-      .then((data) => setPost(data));
-  }, [id]);
+  const { post } = useLoaderData();
 
   return (
     <div>
-      {post && (
-        <>
-          <h1>{post.title}</h1>
-          <p>{post.body}</p>
-        </>
-      )}
+      <Suspense fallback={<h2>Loading...</h2>}>
+        <Await resolve={post}>
+          <Post />
+        </Await>
+      </Suspense>
     </div>
   );
 };
 
-export default Singlepost;
+async function getPostById(id) {
+  const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`);
+  return res.json();
+}
+
+const postLoader = async ({ params }) => {
+  const id = params.id;
+
+  return { post: getPostById(id), id };
+};
+
+export { Singlepost, postLoader };
